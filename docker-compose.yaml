@@ -1,0 +1,87 @@
+version: '2'
+
+services:
+
+  python27_1:
+    build:
+      context: stages/01/python27
+    volumes:
+      - $PWD/bin:/app
+    container_name: test_grequests_python27_1
+    hostname: python27_1
+    command: tail -f /dev/null
+
+  python37_1:
+    build:
+      context: stages/01/python37
+    volumes:
+      - $PWD/bin:/app
+    container_name: test_grequests_python37_1
+    hostname: python37_1
+    command: tail -f /dev/null
+
+  python27_2:
+    build:
+      context: stages/02/python27
+    volumes:
+      - $PWD/bin:/app
+    container_name: test_grequests_python27_2
+    hostname: python27_2
+    command: tail -f /dev/null
+
+  python37_2:
+    build:
+      context: stages/02/python37
+    volumes:
+      - $PWD/bin:/app
+    container_name: test_grequests_python37_2
+    hostname: python37_2
+    command: tail -f /dev/null
+
+  python27_3:
+    build:
+      context: stages/03/python27
+    volumes:
+      - $PWD/bin:/app
+    container_name: test_grequests_python27_3
+    hostname: python27_3
+    command: tail -f /dev/null
+
+  python37_3:
+    build:
+      context: stages/03/python37
+    volumes:
+      - $PWD/bin:/app
+    container_name: test_grequests_python37_3
+    hostname: python37_3
+    command: tail -f /dev/null
+
+  python27_4:
+    build:
+      context: stages/04/python27
+    volumes:
+      - $PWD/bin:/app
+      - $PWD/patches:/patches
+    container_name: test_grequests_python27_4
+    hostname: python27_4
+    command: tail -f /dev/null
+
+  python37_4:
+    build:
+      context: stages/04/python37
+    volumes:
+      - $PWD/bin:/app
+      - $PWD/patches:/patches
+    container_name: test_grequests_python37_4
+    hostname: python37_4
+    command: tail -f /dev/null
+
+  http_server:
+    image: shirani/go-httpbin:latest
+    command: /bin/go-httpbin -host 0.0.0.0 -port 8080
+
+  https_server:
+    volumes:
+      - $PWD/server:/server
+    image: shirani/go-httpbin:latest
+    command: /bin/go-httpbin -host 0.0.0.0 -port 8081 -https-cert-file /server/example.com.crt -https-key-file /server/example.com.key
