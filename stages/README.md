@@ -1,7 +1,13 @@
+Table of Contents
+=================
+
+  * [Pre-requisites](#pre-requisites)
+  * [Stages](#stages)
+
 These are the different stages which show varying runtime depending on the
 Python modules installed.
 
-### Pre-requisites
+## Pre-requisites
 
 - Run ```docker-compose``` from the project dir.
 
@@ -10,7 +16,7 @@ docker-compose --project-name test_grequests up \
                --build --force-recreate
 ```
 
-### Stages:
+## Stages
 
 * [00](./00) - local non-virtualenv setup 
   - Python2 runs **slow**, Python3 runs fast
