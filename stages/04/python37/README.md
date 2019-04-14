@@ -9,6 +9,7 @@ Table of Contents
       * [Fetch URLs after patching](#fetch-urls-after-patching)
       * [Fetch URLs with DEBUG logs after patching](#fetch-urls-with-debug-logs-after-patching)
       * [Toggle patch to verify](#toggle-patch-to-verify)
+      * [Profile code before patching](#profile-code-before-patching)
       * [Profile code after patching](#profile-code-after-patching)
       * [Trace code](#trace-code)
       * [Get socket class](#get-socket-class)
@@ -234,6 +235,69 @@ gevent-openssl==1.2
 
 ```
 ./docker-exec-patch-action.sh test_grequests_python37_4 revert
+```
+
+## Profile code before patching
+
+- Command:
+
+```
+./docker-exec.sh test_grequests_python37_4 \
+   /usr/local/bin/python /app/test_grequests_v2.py \
+   --url https://https_server:8081/delay/1 --url-count 10 \
+   --profile-code --profile-stats-count 20
+```
+
+- Sample output:
+
+```
+================================
+--------------------------------
+urllib3==1.24.1
+requests==2.21.0
+gevent==1.4.0
+grequests==0.3.0
+pyopenssl==19.0.0
+gevent-openssl==1.2
+--------------------------------
++ docker exec -it test_grequests_python37_4 /usr/local/bin/python /app/test_grequests_v2.py --url https://https_server:8081/delay/1 --url-count 10 --profile-code --profile-stats-count 20
+2019-04-14 13:48:39,487 - python37_4 - START
+2019-04-14 13:48:50,056 - python37_4 - len(all_page_ids) = 10
+2019-04-14 13:48:50,056 - python37_4 - len(valid_page_ids) = 10
+2019-04-14 13:48:50,056 - python37_4 - len(invalid_page_ids) = 0
+         30276 function calls (29946 primitive calls) in 10.565 seconds
+
+   Ordered by: cumulative time
+   List reduced from 717 to 20 due to restriction <20>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000   10.567   10.567 /usr/local/lib/python3.7/site-packages/grequests.py:103(map)
+     10/1    0.001    0.000   10.566   10.566 /usr/local/lib/python3.7/site-packages/grequests.py:60(send)
+     10/1    0.000    0.000   10.566   10.566 /usr/local/lib/python3.7/site-packages/requests/sessions.py:466(request)
+     10/1    0.001    0.000   10.538   10.538 /usr/local/lib/python3.7/site-packages/requests/sessions.py:617(send)
+     10/1    0.001    0.000   10.535   10.535 /usr/local/lib/python3.7/site-packages/requests/adapters.py:394(send)
+     10/1    0.001    0.000   10.528   10.528 /usr/local/lib/python3.7/site-packages/urllib3/connectionpool.py:446(urlopen)
+     10/1    0.002    0.000   10.526   10.526 /usr/local/lib/python3.7/site-packages/urllib3/connectionpool.py:319(_make_request)
+       10    0.000    0.000   10.083    1.008 /usr/local/lib/python3.7/http/client.py:1277(getresponse)
+       10    0.001    0.000   10.081    1.008 /usr/local/lib/python3.7/http/client.py:289(begin)
+       10    0.001    0.000   10.029    1.003 /usr/local/lib/python3.7/http/client.py:256(_read_status)
+       70    0.001    0.000   10.028    0.143 {method 'readline' of '_io.BufferedReader' objects}
+       10    0.000    0.000   10.027    1.003 /usr/local/lib/python3.7/socket.py:575(readinto)
+    20/10    0.002    0.000   10.027    1.003 /usr/local/lib/python3.7/site-packages/urllib3/contrib/pyopenssl.py:292(recv_into)
+       10    0.001    0.000   10.019    1.002 /usr/local/lib/python3.7/site-packages/urllib3/util/wait.py:139(wait_for_read)
+       10    0.001    0.000   10.018    1.002 /usr/local/lib/python3.7/site-packages/urllib3/util/wait.py:87(poll_wait_for_socket)
+       11    0.000    0.000   10.017    0.911 /usr/local/lib/python3.7/site-packages/urllib3/util/wait.py:41(_retry_on_intr)
+       10    0.000    0.000   10.016    1.002 /usr/local/lib/python3.7/site-packages/urllib3/util/wait.py:99(do_poll)
+       11   10.016    0.911   10.016    0.911 {method 'poll' of 'select.poll' objects}
+     10/1    0.001    0.000    9.516    9.516 /usr/local/lib/python3.7/site-packages/urllib3/connectionpool.py:831(_validate_conn)
+     10/1    0.001    0.000    9.515    9.515 /usr/local/lib/python3.7/site-packages/urllib3/connection.py:299(connect)
+
+
+
+2019-04-14 13:48:50,068 - python37_4 - total_time=0:00:10.587251
+2019-04-14 13:48:50,069 - python37_4 - END
++ set +x
+================================
 ```
 
 ## Profile code after patching
