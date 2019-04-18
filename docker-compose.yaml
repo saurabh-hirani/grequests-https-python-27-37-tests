@@ -83,5 +83,5 @@ services:
   https_server:
     volumes:
       - $PWD/server:/server
-    image: shirani/go-httpbin:latest
+    image: mccutchen/go-httpbin:v2.1.1
     command: /bin/go-httpbin -host 0.0.0.0 -port 8081 -https-cert-file /server/example.com.crt -https-key-file /server/example.com.key
