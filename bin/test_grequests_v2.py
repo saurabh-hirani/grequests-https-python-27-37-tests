@@ -69,12 +69,11 @@ def setup_logging(log_level):
     hostname = get_hostname()
 
     logging_format = ''
-    logging_format_pre = '%(asctime)s'
+    logging_format_pre = '%(asctime)s '
     logging_format += logging_format_pre
     if hostname != '':
         logging_format += ' - ' + hostname + ' - '
-    # logging_format_post = '%(pathname)s:%(funcName)s:%(lineno)s - %(levelname)s - %(message)s'
-    logging_format_post = '%(message)s'
+    logging_format_post = '%(pathname)s:%(funcName)s:%(lineno)s - %(levelname)s - %(message)s'
     logging_format += logging_format_post
 
     formatter = logging.Formatter(logging_format)
