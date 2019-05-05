@@ -6,8 +6,10 @@ Table of Contents
    * [Pre-requisites](#pre-requisites)
    * [Stage 0: Python 2.7](#stage-0-python-27)
       * [Fetch URLs with profiling](#fetch-urls-with-profiling)
+      * [Get socket class](#get-socket-class)
    * [Stage 0: Python 3.7](#stage-0-python-37)
       * [Fetch URLs with profiling](#fetch-urls-with-profiling-1)
+      * [Get socket class](#get-socket-class-1)
 
 # Disclaimer
 
@@ -74,6 +76,25 @@ len(invalid_page_ids) = 0
 total_time=0:00:10.283865
 ```
 
+## Get socket class
+
+- Command:
+
+```
+python2 ./bin/test_grequests_v1.py --url https://localhost:8082/delay/1 --url-count 1 --socket-class
+```
+
+- Sample output:
+
+```
+2019-05-05 12:30:20,842 test_grequests_v2.py:main:186 - INFO - START
+2019-05-05 12:30:21,881 test_grequests_v2.py:make_requests:150 - INFO - len(all_page_ids) = 1
+2019-05-05 12:30:21,882 test_grequests_v2.py:make_requests:151 - INFO - len(valid_page_ids) = 1
+2019-05-05 12:30:21,882 test_grequests_v2.py:make_requests:152 - INFO - len(invalid_page_ids) = 0
+2019-05-05 12:30:22,894 test_grequests_v2.py:main:195 - INFO - socket_class = <class 'urllib3.contrib.pyopenssl.WrappedSocket'>
+```
+
+
 # Stage 0: Python 3.7
 
 ## Fetch URLs with profiling
@@ -120,4 +141,31 @@ len(invalid_page_ids) = 0
 
 
 total_time=0:00:01.215995
+```
+
+## Get socket class
+
+
+- Command:
+
+```
+python3 ./bin/test_grequests_v1.py --url https://localhost:8082/delay/1 --url-count 1 --socket-class
+```
+
+- Sample output:
+
+```
+2019-05-05 12:30:20,842 test_grequests_v2.py:main:186 - INFO - START
+2019-05-05 12:30:21,881 test_grequests_v2.py:make_requests:150 - INFO - len(all_page_ids) = 1
+2019-05-05 12:30:21,882 test_grequests_v2.py:make_requests:151 - INFO - len(valid_page_ids) = 1
+2019-05-05 12:30:21,882 test_grequests_v2.py:make_requests:152 - INFO - len(invalid_page_ids) = 0
+2019-05-05 12:30:22,894 test_grequests_v2.py:main:195 - INFO - socket_class = <class 'urllib3.contrib.pyopenssl.WrappedSocket'>
+```
+
+```
+2019-05-05 12:31:31,839 test_grequests_v2.py:main:186 - INFO - START
+2019-05-05 12:31:32,918 test_grequests_v2.py:make_requests:150 - INFO - len(all_page_ids) = 1
+2019-05-05 12:31:32,918 test_grequests_v2.py:make_requests:151 - INFO - len(valid_page_ids) = 1
+2019-05-05 12:31:32,918 test_grequests_v2.py:make_requests:152 - INFO - len(invalid_page_ids) = 0
+2019-05-05 12:31:33,943 test_grequests_v2.py:main:195 - INFO - socket_class = <class 'gevent._ssl3.SSLSocket'>
 ```
