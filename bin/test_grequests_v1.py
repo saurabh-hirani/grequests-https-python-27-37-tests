@@ -42,8 +42,8 @@ def parse_cmdline():
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', '-u', action='store', required=True,
                         help='URL to GET')
-    parser.add_argument('--url-count', action='store', required=False, default=100,
-                        help='Call url these many times.')
+    parser.add_argument('--url-count', action='store', required=False,
+                        default=100, help='Call url these many times.')
     return vars(parser.parse_args(sys.argv[1:]))
 
 
@@ -64,9 +64,12 @@ def make_requests(url, url_count):
     pr.disable()
 
     valid_responses = [
-        x for x in all_responses if x is not None and x.status_code == 200]
+        x for x in all_responses if x is not None and x.status_code == 200
+    ]
+
     invalid_responses = [
-        x for x in all_responses if x is None or x.status_code != 200]
+        x for x in all_responses if x is None or x.status_code != 200
+    ]
 
     valid_page_ids = set([int(_get_page_id_from_response(x))
                           for x in valid_responses])

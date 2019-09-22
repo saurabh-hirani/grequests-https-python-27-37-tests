@@ -13,14 +13,16 @@ logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
+
 def parse_cmdline():
     """ Parse command line """
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', '-u', action='store', required=True,
                         help='URL to GET')
-    parser.add_argument('--url-count', action='store', required=False, default=100,
-                        help='Call url these many times.')
+    parser.add_argument('--url-count', action='store', required=False,
+                        default=100, help='Call url these many times.')
     return vars(parser.parse_args(sys.argv[1:]))
+
 
 def make_requests(url, url_count):
     """ Make parallel https requests """
@@ -32,6 +34,7 @@ def make_requests(url, url_count):
 
     return all_responses
 
+
 def main():
     """ Main function """
     args = parse_cmdline()
@@ -39,6 +42,7 @@ def main():
     logging.info('START')
     make_requests(args['url'], args['url_count'])
     logging.info('END')
+
 
 if __name__ == '__main__':
     main()

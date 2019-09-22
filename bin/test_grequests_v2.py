@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import os
 import sys
 import json
 import logging
@@ -27,7 +26,7 @@ except ImportError:
 try:
     import gevent_openssl
     gevent_openssl.monkey_patch()
-except ImportError as ex:
+except ImportError:
     pass
 
 import grequests
@@ -49,7 +48,8 @@ def _get_page_id_from_response(response):
 
 def get_hostname():
     import subprocess
-    p = subprocess.Popen(['cat', '/etc/hostname'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p = subprocess.Popen(['cat', '/etc/hostname'],
+                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     out, _ = p.communicate()
     if p.returncode != 0:
         return ''
@@ -115,9 +115,11 @@ def setup_tracing():
                                               frame.f_lineno, frame.f_code.co_name])
         if event == "call":
             indent[0] += 2
-            print(">" + curr_time + " call", "level:" + str(indent[0]), func_info)
+            print(">" + curr_time + " call",
+                  "level:" + str(indent[0]), func_info)
         elif event == "return":
-            print("<" + curr_time + " exit", "level:" + str(indent[0]), func_info)
+            print("<" + curr_time + " exit",
+                  "level:" + str(indent[0]), func_info)
             indent[0] -= 2
         return tracefunc
     sys.settrace(tracefunc)
@@ -131,7 +133,9 @@ def make_requests(url, url_count, profile_code):
 
     pending_requests = []
     for i in range(url_count):
-        pending_requests.append(grequests.get(url, params={'page': i}, verify=False))
+        pending_requests.append(
+            grequests.get(url, params={'page': i}, verify=False)
+        )
 
     if profile_code:
         pr.enable()
@@ -141,10 +145,16 @@ def make_requests(url, url_count, profile_code):
     if profile_code:
         pr.disable()
 
-    valid_responses = [x for x in all_responses if x is not None and x.status_code == 200]
-    invalid_responses = [x for x in all_responses if x is None or x.status_code != 200]
+    valid_responses = [
+        x for x in all_responses if x is not None and x.status_code == 200
+    ]
 
-    valid_page_ids = set([int(_get_page_id_from_response(x)) for x in valid_responses])
+    invalid_responses = [
+        x for x in all_responses if x is None or x.status_code != 200
+    ]
+
+    valid_page_ids = set([int(_get_page_id_from_response(x))
+                          for x in valid_responses])
     invalid_page_ids = all_page_ids - valid_page_ids
 
     logger.info('len(all_page_ids) = ' + str(len(all_page_ids)))
@@ -202,6 +212,7 @@ def main():
     logger.info('total_time={}'.format(total_time))
     logger.info('END')
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())
