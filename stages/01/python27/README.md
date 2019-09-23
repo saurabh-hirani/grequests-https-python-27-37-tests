@@ -14,7 +14,7 @@ Table of Contents
 
 ## Check installed modules
 
-- Command: 
+- Command:
 
 ```
 cat requirements.txt
@@ -35,7 +35,7 @@ grequests==0.3.0
 
 ```
 ./docker-exec.sh test_grequests_python27_1 \
-  /usr/local/bin/python /app/test_grequests_v2.py \
+  /usr/local/bin/python /app/test_grequests_v1.py \
   --url https://https_server:8081/delay/1 --url-count 10
 ```
 
@@ -66,7 +66,7 @@ grequests==0.3.0
 
 ```
 ./docker-exec.sh test_grequests_python27_1 \
-  /usr/local/bin/python /app/test_grequests_v2.py \
+  /usr/local/bin/python /app/test_grequests_v1.py \
   --log-level DEBUG \
   --url https://https_server:8081/delay/1 --url-count 10
 ```
@@ -118,7 +118,7 @@ grequests==0.3.0
 
 ```
 ./docker-exec.sh test_grequests_python27_1 \
-   /usr/local/bin/python /app/test_grequests_v2.py \
+   /usr/local/bin/python /app/test_grequests_v1.py \
    --url https://https_server:8081/delay/1 --url-count 10 \
    --profile-code --profile-stats-count 20
 ```
@@ -180,7 +180,7 @@ grequests==0.3.0
 
 ```
 ./docker-exec.sh test_grequests_python27_1 \
- /usr/local/bin/python /app/test_grequests_v2.py \
+ /usr/local/bin/python /app/test_grequests_v1.py \
  --url https://https_server:8081/delay/1 --url-count 10 \
  --trace-calls > trace.out
 ```
@@ -191,7 +191,7 @@ grequests==0.3.0
 
 ```
 ./docker-exec.sh test_grequests_python27_1 \
-/usr/local/bin/python /app/test_grequests_v2.py \
+/usr/local/bin/python /app/test_grequests_v1.py \
 --url https://https_server:8081/delay/1 --url-count 10 \
 --socket-class
 ```

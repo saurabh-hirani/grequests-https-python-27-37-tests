@@ -33,7 +33,7 @@ virtualenv setups.
 - Command:
 
 ```
-python2 ./bin/test_grequests_v1.py --url https://localhost:8082/delay/1 --url-count 10
+python2 ./bin/test_grequests_v1.py --url https://localhost:8082/delay/1 --url-count 10 --log-level DEBUG --profile-code --profile-stats-count 20
 ```
 
 - Sample output:
@@ -81,7 +81,7 @@ total_time=0:00:10.283865
 - Command:
 
 ```
-python3 ./bin/test_grequests_v1.py --url https://localhost:8082/delay/1 --url-count 10
+python3 ./bin/test_grequests_v1.py --url https://localhost:8082/delay/1 --url-count 10 --log-level DEBUG --profile-code --profile-stats-count 20
 ```
 
 - Sample output:

@@ -7,11 +7,8 @@ import argparse
 import logging
 import requests
 import urllib3
+import utils
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
 
 
 def parse_cmdline():
@@ -39,7 +36,9 @@ def main():
     """ Main function """
     args = parse_cmdline()
 
-    logging.info('START')
+    global logger
+    logger = utils.setup_logging('DEBUG')
+    logger.info('START')
     make_requests(args['url'], args['url_count'])
     logging.info('END')
 

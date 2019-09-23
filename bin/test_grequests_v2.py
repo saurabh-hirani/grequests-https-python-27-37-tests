@@ -2,11 +2,11 @@ from __future__ import print_function
 
 import sys
 import json
-import logging
 import time
 import cProfile
 import pstats
 import argparse
+import utils
 from datetime import datetime
 
 try:
@@ -46,59 +46,26 @@ def _get_page_id_from_response(response):
     return query_string.split('=')[1]
 
 
-def get_hostname():
-    import subprocess
-    p = subprocess.Popen(['cat', '/etc/hostname'],
-                         stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out, _ = p.communicate()
-    if p.returncode != 0:
-        return ''
-    return out.decode("utf-8").strip()
-
-
-def setup_logging(log_level):
-    """ Logger setup """
-    global logger
-    logger = logging.getLogger()
-
-    log_level = getattr(logging, log_level)
-    logger.setLevel(log_level)
-
-    logHandler = logging.StreamHandler()
-
-    hostname = get_hostname()
-
-    logging_format = ''
-    logging_format_pre = '%(asctime)s '
-    logging_format += logging_format_pre
-    if hostname != '':
-        logging_format += ' - ' + hostname + ' - '
-    logging_format_post = '%(pathname)s:%(funcName)s:%(lineno)s - %(levelname)s - %(message)s'
-    logging_format += logging_format_post
-
-    formatter = logging.Formatter(logging_format)
-    logHandler.setFormatter(formatter)
-    logger.addHandler(logHandler)
-
-    return logger
-
-
 def parse_cmdline():
     """ Parse command line """
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', '-u', action='store', required=True,
                         help='URL to GET')
-    parser.add_argument('--log-level', '-l', action='store', required=False, default='INFO',
-                        help='Log level as per logging module.')
-    parser.add_argument('--url-count', action='store', required=False, default=100,
-                        help='Call url these many times.')
-    parser.add_argument('--profile-code', '-p', action='store_true', required=False, default=False,
+    parser.add_argument('--log-level', '-l', action='store', required=False,
+                        default='INFO', help='Log level as per logging module.')
+    parser.add_argument('--url-count', action='store', required=False,
+                        default=100, help='Call url these many times.')
+    parser.add_argument('--profile-code', '-p', action='store_true',
+                        required=False, default=False,
                         help='Flag to enable/disable code profiling')
-    parser.add_argument('--profile-stats-count', action='store', required=False, default=-1,
-                        help='Number of profiled stats to print (sorted by highest time first).')
-    parser.add_argument('--trace-calls', '-t', action='store_true', required=False, default=False,
+    parser.add_argument('--profile-stats-count', action='store',
+                        required=False, default=-1,
+                        help='Number of profiled stats to print')
+    parser.add_argument('--trace-calls', '-t', action='store_true',
+                        required=False, default=False,
                         help='Flag to enable/disable code profiling')
-    parser.add_argument('--socket-class', action='store_true', required=False, default=False,
+    parser.add_argument('--socket-class', action='store_true',
+                        required=False, default=False,
                         help='Get and print underlying socket class')
     return vars(parser.parse_args(sys.argv[1:]))
 
@@ -112,7 +79,8 @@ def setup_tracing():
             indent = [0]
         curr_time = datetime.fromtimestamp(time.time()).strftime("%H:%M:%S.%f")
         func_info = ':'.join(str(x) for x in [frame.f_code.co_filename,
-                                              frame.f_lineno, frame.f_code.co_name])
+                                              frame.f_lineno,
+                                              frame.f_code.co_name])
         if event == "call":
             indent[0] += 2
             print(">" + curr_time + " call",
@@ -192,7 +160,8 @@ def main():
     start_time = datetime.now()
     args = parse_cmdline()
 
-    setup_logging(args['log_level'])
+    global logger
+    logger = utils.setup_logging(args['log_level'])
     logger.info('START')
 
     if args['trace_calls']:
