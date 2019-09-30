@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 def patch_all():
   import mysocket
   import patched_socket
