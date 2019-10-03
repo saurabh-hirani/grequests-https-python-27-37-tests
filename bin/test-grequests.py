@@ -6,12 +6,8 @@ import utils
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-url = 'http://localhost:8081/delay/1'
-if sys.argv[1] == 'https':
-    url = 'https://localhost:8082/delay/1'
-url_count = 5
 
-def test_grequests():
+def test_grequests(url, url_count):
     pending_requests = []
     for i in range(url_count):
         pending_requests.append(
@@ -22,10 +18,21 @@ def test_grequests():
 
 
 if __name__ == '__main__':
+    protocol = port = url_count = None
+
+    protocol = sys.argv[1]
+    if protocol == 'https':
+        port = 8082
+    else:
+        port = 8081
+    url = '{}://localhost:{}/delay/1'.format(protocol, port)
+
+    url_count = int(sys.argv[2])
+
     logger = utils.setup_logging('DEBUG')
     logger.info("START")
-    start_time = int(time.time())
-    test_grequests()
-    end_time = int(time.time())
+    start_time = int(round(time.time() * 1000))
+    test_grequests(url, url_count)
+    end_time = int(round(time.time() * 1000))
     logger.info("END")
-    logger.info("time = {} seconds".format(end_time - start_time))
+    logger.info("time = {} seconds".format((end_time - start_time) / 1000.0))
