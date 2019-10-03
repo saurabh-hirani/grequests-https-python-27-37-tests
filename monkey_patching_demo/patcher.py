@@ -1,4 +1,6 @@
+
 def patch_all():
-  import mysocket
-  import patched_socket
-  mysocket.f1 = patched_socket.f1
+  import blocking_socket
+  import non_blocking_socket
+  blocking_socket.socket = non_blocking_socket.socket
+
