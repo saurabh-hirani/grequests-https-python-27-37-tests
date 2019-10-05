@@ -178,8 +178,11 @@ def main():
         print(format_profiler_stats(args['profile_stats_count']).getvalue())
 
     total_time = datetime.now() - start_time
-    logger.info('total_time={}'.format(total_time))
+    print("")
+    logger.warning('total_time={}'.format(total_time))
+    print("")
     logger.info('END')
+    print("")
     return 0
 
 

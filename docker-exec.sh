@@ -10,13 +10,9 @@ fi
 shift
 
 for container in $(echo -e "$containers" | sort -n); do
-  echo "================================"
-  echo "--------------------------------"
-  docker exec -it $container cat /tmp/requirements.txt
-  echo "--------------------------------"
-  set -x
+  echo "============="
+  echo -n "$container: "
+  docker exec -it $container sh -c 'echo installed_modules $(cat /tmp/requirements.txt | tr "\n" " ")'
   docker exec -it $container $* 
-  set +x
-  echo "================================"
-  echo -e "\n\n"
+  echo "============="
 done
