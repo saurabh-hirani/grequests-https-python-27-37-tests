@@ -1,12 +1,11 @@
+import grequests
 import urllib3
 import time
 import sys
 import utils
 
-import grequests
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
 
 def test_grequests(url, url_count):
     pending_requests = []

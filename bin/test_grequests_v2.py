@@ -171,7 +171,7 @@ def main():
 
     if args['socket_class']:
         socket_class = get_socket_class(args['url'])
-        logger.info('socket_class = ' + str(socket_class))
+        logger.warning('socket_class = ' + str(socket_class))
         return 0
 
     if args['profile_code']:
