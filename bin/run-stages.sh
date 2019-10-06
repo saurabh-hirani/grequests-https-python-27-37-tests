@@ -16,9 +16,13 @@ PROTO      - Protocol             - [http|https]
 
 OPTIONAL ENVIRONMENT VARIABLES:
 
-URL        - URL to call                           - Default: Derived by STAGE and PROTO
-PYVERSIONS - Comma separated Python version to run - Default: 27,37
-COUNT    - Number of times to call                 - Default: 5
+URL          - URL to call                     - Default: Derived by STAGE and PROTO
+COUNT        - Number of times to call         - Default: 5
+PYVERSIONS   - Comma separated Python versions - Default: 27,37
+LOG_LEVEL    - Logging level                   - Default: WARNING
+PROFILE      - Profile the code                - Default: 0
+TRACE        - Trace the code                  - Default: 0
+SOCKET_CLASS - Dump the socket class         - Default: 0
 
 USAGE
 )
@@ -57,6 +61,9 @@ fi
 
 COUNT=${COUNT:-5}
 PYVERSIONS=${PYVERSIONS:-27,37}
+LOG_LEVEL=${LOG_LEVEL:-WARNING}
+PROFILE=${PROFILE:-0}
+TRACE=${TRACE:-0}
 
 if [[ -z $URL ]]; then
     if [[ $STAGE == '0' ]]; then
@@ -74,6 +81,17 @@ if [[ -z $URL ]]; then
     fi
 fi
 
+EXTRA_OPTS="--log-level $LOG_LEVEL "
+if [[ $PROFILE == '1' ]]; then
+    EXTRA_OPTS="$EXTRA_OPTS --profile-code --profile-stats-count 15"
+fi
+if [[ $TRACE == '1' ]]; then
+    EXTRA_OPTS="$EXTRA_OPTS --trace"
+fi
+if [[ $SOCKET_CLASS == '1' ]]; then
+    EXTRA_OPTS="$EXTRA_OPTS --socket-class"
+fi
+
 for PYVERSION in $(echo $PYVERSIONS | tr ',' '\n'); do
     if [[ $STAGE != '0' ]]; then
         program='/app/test_grequests_v1.py'
@@ -84,7 +102,6 @@ for PYVERSION in $(echo $PYVERSIONS | tr ',' '\n'); do
         ./docker-exec.sh "test_grequests_python${PYVERSION}_${STAGE}" \
         /usr/local/bin/python "${program}" \
         --url $URL --url-count $COUNT \
-        --log-level WARN \
-        --profile-code --profile-stats-count 15
+        $EXTRA_OPTS
     fi
 done

@@ -28,9 +28,13 @@ if __name__ == '__main__':
     url_count = int(sys.argv[2])
 
     logger = utils.setup_logging('DEBUG')
+    print("")
     logger.info("START")
     start_time = int(round(time.time() * 1000))
     test_requests(url, url_count)
     end_time = int(round(time.time() * 1000))
     logger.info("END")
-    logger.info("time = {} seconds".format((end_time - start_time) / 1000.0))
+    print("")
+    logger.info("total_time = {} seconds".format(
+        (end_time - start_time) / 1000.0))
+    print("")
