@@ -77,11 +77,11 @@ services:
     command: tail -f /dev/null
 
   http_server:
-    image: shirani/go-httpbin:latest
+    image: mccutchen/go-httpbin:v2.1.3
     command: /bin/go-httpbin -host 0.0.0.0 -port 8080
 
   https_server:
     volumes:
       - $PWD/server:/server
-    image: mccutchen/go-httpbin:v2.1.1
+    image: mccutchen/go-httpbin:v2.1.3
     command: /bin/go-httpbin -host 0.0.0.0 -port 8081 -https-cert-file /server/example.com.crt -https-key-file /server/example.com.key
