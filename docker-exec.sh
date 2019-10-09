@@ -11,8 +11,10 @@ shift
 
 for container in $(echo -e "$containers" | sort -n); do
   echo "============="
-  echo -n "$container: "
-  docker exec -it $container sh -c 'echo installed_modules: $(cat /tmp/requirements.txt | tr "\n" " ")'
+  for module in $(docker exec -it $container cat /tmp/requirements.txt); do
+      echo -e "$container: installed_module: $module"
+  done
+  echo "============="
   # set -x
   docker exec -it $container $* 
   # set +x

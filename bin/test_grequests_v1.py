@@ -143,9 +143,9 @@ def format_profiler_stats(stats_count):
     sortby = 'cumulative'
     ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
     if stats_count != -1:
-        ps.print_stats(stats_count)
+        ps.strip_dirs().sort_stats(sortby).print_stats(stats_count)
     else:
-        ps.print_stats(stats_count)
+        ps.strip_dirs().sort_stats(sortby).print_stats(stats_count)
     return s
 
 
